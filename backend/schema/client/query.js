@@ -1,13 +1,10 @@
-// const Client = require("./db");
-const { clients } = require("../_mockData");
+const Client = require("./db");
 
 module.exports.ClientQuery = {
-  clients: (parent, args) => {
-    // return Client.find();
-    return clients;
+  clients: async (parent, args) => {
+    return await Client.find();
   },
-  client: (parent, args) => {
-    // return Client.findById(args.id);
-    return clients.find((client) => client.id === args.id);
+  client: async (parent, args) => {
+    return await Client.findById(args.id);
   },
 };

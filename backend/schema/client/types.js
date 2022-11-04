@@ -9,4 +9,13 @@ module.exports.ClientTypes = `
         clients: [Client]
         client(id: String!): Client
     }
+    input AddClientInput {
+        name: String!
+        email: String
+        phone: String
+    }
+    extend type Mutation {
+        addClient(data: AddClientInput!): Client
+        deleteClient(id: ID!): Client
+    }
 `;

@@ -1,17 +1,29 @@
-// import { gql } from "apollo-server-express";
 const { gql } = require("apollo-server-express");
-// import { ClientTypes, ClientQuery } from "./client";
-const { ClientTypes, ClientQuery } = require("./client");
+const { ClientTypes, ClientQuery, ClientMutation } = require("./client");
+const {
+  ProjectQuery,
+  ProjectTypes,
+  ProjectMutation,
+  ProjectResolver,
+} = require("./project");
+const { GlobalResolver } = require("./util/resolver");
 
-// remember we only use gql in this file. types in other files are just simple strings
 module.exports.typeDefs = gql`
   type Query
-  # type Mutation
+  type Mutation
   ${ClientTypes}
+  ${ProjectTypes}
 `;
+
 module.exports.resolvers = {
   Query: {
     ...ClientQuery,
+    ...ProjectQuery,
   },
-  // Mutation: {},
+  Mutation: {
+    ...ClientMutation,
+    ...ProjectMutation,
+  },
+  Project: ProjectResolver,
+  ...GlobalResolver
 };
