@@ -21,7 +21,15 @@ module.exports.ProjectTypes = `
       status: Status
       clientId: ID!
     }
+    input UpdateProjectInput {
+      id: ID!
+      name: String
+      description: String
+      status: Status
+    }
     extend type Mutation {
       addProject(data: AddProjectInput!): Project
+      deleteProject(id: ID!): Project
+      updateProject(data: UpdateProjectInput!): Project
     }
 `;
