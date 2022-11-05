@@ -20,6 +20,7 @@ module.exports.ProjectMutation = {
           name: args.data.name,
           description: args.data.description,
           status: args.data.status,
+          clientId: args.data.clientId,
         },
       },
       { new: true }

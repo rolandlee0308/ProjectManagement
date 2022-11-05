@@ -26,6 +26,7 @@ module.exports.ProjectTypes = `
       name: String
       description: String
       status: Status
+      clientId: ID!
     }
     extend type Mutation {
       addProject(data: AddProjectInput!): Project

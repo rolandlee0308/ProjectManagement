@@ -5,12 +5,15 @@ import {
   Paper,
   ThemeProvider,
 } from "@mui/material";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import React, { useContext, useMemo } from "react";
 import Header from "./component/Header";
 import { Context as GlobalContext } from "./context/Global";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
-import Clients from "./component/Clients";
-import AddClient from "./component/AddClient";
+
+import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
+import Project from "./pages/Project";
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -33,7 +36,7 @@ const cache = new InMemoryCache({
 
 const client = new ApolloClient({
   uri: "http://localhost:5000/graphql",
-  cache
+  cache,
 });
 
 function App() {
@@ -43,8 +46,11 @@ function App() {
         <Header />
         <Paper sx={{ flexGrow: 1 }} square>
           <Container sx={{ height: 1 }}>
-            <AddClient />
-            <Clients />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/projects/:id" element={<Project />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </Container>
         </Paper>
       </Box>
@@ -70,7 +76,9 @@ const Root = () => {
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
-        <App />
+        <Router>
+          <App />
+        </Router>
       </ThemeProvider>
     </ApolloProvider>
   );
