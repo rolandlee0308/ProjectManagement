@@ -1,7 +1,6 @@
 import {
   AppBar,
   Box,
-  Button,
   IconButton,
   Toolbar,
   Typography,
@@ -29,7 +28,6 @@ export default function Header() {
               <Brightness4Icon />
             )}
           </IconButton>
-          <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
     </Box>

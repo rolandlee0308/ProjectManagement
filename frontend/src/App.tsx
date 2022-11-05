@@ -10,19 +10,40 @@ import Header from "./component/Header";
 import { Context as GlobalContext } from "./context/Global";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import Clients from "./component/Clients";
+import AddClient from "./component/AddClient";
+
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        clients: {
+          merge(existing, incoming) {
+            return incoming;
+          },
+        },
+        projects: {
+          merge(existing, incoming) {
+            return incoming;
+          },
+        },
+      },
+    },
+  },
+});
 
 const client = new ApolloClient({
   uri: "http://localhost:5000/graphql",
-  cache: new InMemoryCache(),
+  cache
 });
 
 function App() {
   return (
     <>
-      <Box sx={{ display: "flex", flexDirection: "column", height: '100vh' }}>
+      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <Header />
         <Paper sx={{ flexGrow: 1 }} square>
-          <Container>
+          <Container sx={{ height: 1 }}>
+            <AddClient />
             <Clients />
           </Container>
         </Paper>

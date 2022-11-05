@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import {
   IconButton,
   Paper,
@@ -10,27 +10,34 @@ import {
   TableRow,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-const GET_CLIENTS = gql`
-  query getClients {
-    clients {
-      id
-      name
-      email
-      phone
-    }
-  }
-`;
+import { GET_CLIENTS } from "../queries/client";
+import Spinner from "./Spinner";
+import { DELETE_CLIENT } from "../mutations/client";
 
 export default function Clients() {
   const { loading, error, data } = useQuery(GET_CLIENTS);
+  const [deleteClient] = useMutation(DELETE_CLIENT, {
+    update(cache, { data: { deleteClient } }) {
+      const { clients }: any = cache.readQuery({ query: GET_CLIENTS });
 
-  if (loading) return <p>Loading . . .</p>;
+      cache.writeQuery({
+        query: GET_CLIENTS,
+        data: {
+          clients: clients.filter(
+            (client: any) => client.id !== deleteClient.id
+          ),
+        },
+      });
+    },
+  });
+
+  if (loading) return <Spinner />;
   if (error) return <p>Something went wrong</p>;
+
   return (
     <>
       {!loading && !error && (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{ mt: 2 }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
@@ -50,7 +57,11 @@ export default function Clients() {
                   <TableCell align="right">{row.email}</TableCell>
                   <TableCell align="right">{row.phone}</TableCell>
                   <TableCell align="right">
-                    <IconButton onClick={() => console.log("hi")}>
+                    <IconButton
+                      onClick={() =>
+                        deleteClient({ variables: { id: row.id } })
+                      }
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
